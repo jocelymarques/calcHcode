@@ -40,7 +40,15 @@ class CalcController {
         this._operation.pop();
     }
 
+    getLastOperation(){
+        return this._operation[this._operation.length-1];
+    }
+
     addOperation(value){
+
+        
+
+
         this._operation.push(value); 
 
         console.log(this._operation);
