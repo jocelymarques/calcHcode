@@ -17,51 +17,86 @@ class CalcController {
         setInterval(() => {
 
             this.setDisplayDateTime();
-        
+
         }, 1000);
 
 
     }
 
-    addEventListenerAll(element, events, fn){
+    addEventListenerAll(element, events, fn) {
 
-        events.split(' ').forEach(event =>{
+        events.split(' ').forEach(event => {
 
             element.addEventListener(event, fn, false);
 
         });
     }
 
-    clearAll(){
+    clearAll() {
         this._operation = [];
     }
 
-    clearEntry(){
+    clearEntry() {
         this._operation.pop();
     }
 
-    getLastOperation(){
-        return this._operation[this._operation.length-1];
+    getLastOperation() {
+        return this._operation[this._operation.length - 1];
     }
 
-    addOperation(value){
+    setLastOperation(value){
 
-        
+        this._operation[this._operation.length - 1] = value;
+
+    }
+
+    isOperator(value) {
+        return (['+', '-', '*', '%', '/'].indexOf(value) > -1);
+
+    }
+
+    addOperation(value) {
+
+        console.log('A', isNaN(this.getLastOperation()));
+
+        if (isNaN(this.getLastOperation())) {
+            //string 
+            if (this.isOperator(value)) {
+                //troca o operador
+                this.setLastOperation(value);
+
+            } else if (isNaN(value)) {
+                // outra coisa
+                console.log(value);
+
+            } else {
+
+                this._operation.push(value);
+
+            }
 
 
-        this._operation.push(value); 
+        } else {
+            //Number
+            let newValue = this.getLastOperation().toString() + value.toString();
+            this.setLastOperation(parseInt(newValue));
+
+        }
+
+
+
 
         console.log(this._operation);
     }
 
-    setError(){
+    setError() {
         this.displayCalc = "Error";
     }
 
 
-    execBtn(value){
+    execBtn(value) {
 
-        switch (value){
+        switch (value) {
             case 'ac':
                 this.clearAll();
                 break;
@@ -71,21 +106,31 @@ class CalcController {
                 break;
 
             case 'soma':
+                this.addOperation('+');
                 break;
 
             case 'subtracao':
+                this.addOperation('-');
                 break;
 
             case 'divisao':
+                this.addOperation('/');
                 break;
 
             case 'multiplicacao':
+                this.addOperation('*');
                 break;
 
             case 'porcento':
+                this.addOperation('%');
                 break;
 
             case 'igual':
+                this.addOperation('=');
+                break;
+
+            case 'ponto':
+                this.addOperation('.');
                 break;
 
             case '0':
@@ -109,24 +154,24 @@ class CalcController {
 
     }
 
-    initButtonsEvents(){
+    initButtonsEvents() {
 
         let buttons = document.querySelectorAll("#buttons > g, #parts > g");
 
-        buttons.forEach((btn, index)=> {
-            this.addEventListenerAll(btn, "click drag", e =>{
+        buttons.forEach((btn, index) => {
+            this.addEventListenerAll(btn, "click drag", e => {
                 // console.log(btn.className.baseVal.replace("btn-",""));
 
-                let textBtn = btn.className.baseVal.replace("btn-","");
+                let textBtn = btn.className.baseVal.replace("btn-", "");
 
                 this.execBtn(textBtn);
             });
 
-            this.addEventListenerAll(btn, "mouseover mouseup mousedown", e =>{
+            this.addEventListenerAll(btn, "mouseover mouseup mousedown", e => {
 
                 btn.style.cursor = "pointer";
 
-            }); 
+            });
 
 
         });
@@ -134,10 +179,10 @@ class CalcController {
 
     setDisplayDateTime() {
 
-        this.displayDate = this.currentDate.toLocaleDateString(this._locale,{
+        this.displayDate = this.currentDate.toLocaleDateString(this._locale, {
             day: "2-digit",
             month: "long",
-            year:"numeric"
+            year: "numeric"
         });
         this.displayTime = this.currentDate.toLocaleTimeString(this._locale);
 
