@@ -18,9 +18,9 @@ class CalcController {
         this.iniKeyBoard();
     }
 
-    pasteFromClipboard(){
+    pasteFromClipboard() {
 
-        document.addEventListener('paste', e=>{
+        document.addEventListener('paste', e => {
 
             let text = e.clipboardData.getData('Text');
 
@@ -58,9 +58,9 @@ class CalcController {
         this.setLastNumberToDisplay();
         this.pasteFromClipboard();
 
-        document.querySelectorAll('.btn-ac').forEach(btn=>{
+        document.querySelectorAll('.btn-ac').forEach(btn => {
 
-            btn.addEventListener('dblclick', e =>{
+            btn.addEventListener('dblclick', e => {
 
                 this.toggleAudio();
 
@@ -72,7 +72,7 @@ class CalcController {
 
     }
 
-    toggleAudio(){
+    toggleAudio() {
 
         this._audioOnOff = !this._audioOnOff;
 
@@ -84,7 +84,7 @@ class CalcController {
 
             this._audio.currentTime = 0;
             this._audio.play();
-            
+
         }
 
     }
@@ -137,8 +137,8 @@ class CalcController {
                     break;
 
                 case 'c':
-                if (e.ctrlKey) this.copyToClipbord();
-                break;
+                    if (e.ctrlKey) this.copyToClipbord();
+                    break;
 
             }
 
@@ -196,9 +196,15 @@ class CalcController {
 
     getResult() {
 
+        try {
+            return eval(this._operation.join(""));
 
+        } catch (e) {
+            setTimeout(() => {
+                this.setError();
+            }, 1);
 
-        return eval(this._operation.join(""));
+        }
 
     }
 
@@ -468,12 +474,12 @@ class CalcController {
 
     set displayCalc(value) {
 
-        if (value.toString().length > 10){
+        if (value.toString().length > 10) {
             this.setError();
             return false;
         }
 
-      this._displayCalcE1.innerHTML = value;
+        this._displayCalcE1.innerHTML = value;
     }
 
     get currentDate() {
